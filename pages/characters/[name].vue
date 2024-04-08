@@ -5,7 +5,7 @@ const route = useRoute()
 const { data } = await useFetch(`https://rickandmortyapi.com/api/character?name=${route.params.name}`,{
     transform: (data: RickAndMortyResponse<Character>) => {
       return {
-        name: data.results[0].name ,
+        name: data.results[0].name,
         status: data.results[0].status,
         image: data.results[0].image,
       }
@@ -18,19 +18,20 @@ const { data } = await useFetch(`https://rickandmortyapi.com/api/character?name=
       statusMessage: 'No characters found.'
     });
   }
+
+  useHead({
+    title: 'Profil de ' + data.value?.name,
+    meta: [
+      {name: 'description', content: `Le profil complet de ${data.value?.name}`},
+      {property: 'og:image', content: data.value?.image},
+    ]
+  })
 </script>
 
 <template>
   <div>
-    <nav>
-      <NuxtLink to="/characters">Rechercher un personnage</NuxtLink>
-    </nav>
-
     <h1>{{ data?.name }}</h1>
     <div>{{ data?.status }}</div>
     <img :src="data?.image" :alt="data?.name">
-
   </div>
 </template>
-
-<style scoped></style>
